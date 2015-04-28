@@ -21,6 +21,10 @@ var wpLinkTitle;
 			inputs.text = $( '#wp-link-text' );
 			inputs.openInNewTab = $( '#wp-link-target' );
 
+			// unbind the wplink handler here
+			inputs.submit.unbind('click');
+
+			// rebind it to this code instead
 			inputs.submit.click( function( event ) {
 				event.preventDefault();
 				event.stopImmediatePropagation();

@@ -11,7 +11,7 @@ Adds back the missing "title" field in the Insert/Edit URL box in WordPress 4.2
 
 == Description ==
 
-In core ticket [#28206](http://core.trac.wordpress.org/ticket/19603), the editor was modified to have a Link Text field instead of a Title field.
+In core ticket [#28206](http://core.trac.wordpress.org/ticket/28206), the editor was modified to have a Link Text field instead of a Title field.
 
 This plugin adds the Title field back.
 

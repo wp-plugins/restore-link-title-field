@@ -14,7 +14,7 @@ add_action( 'admin_enqueue_scripts', 'restore_link_title_field', 20 );
 function restore_link_title_field() {
 	wp_enqueue_script( 'wplinkTitle', plugins_url( 'restore-link-title-field.js', __FILE__ ), array( 'wplink' ) );
 	wp_localize_script( 'wplinkTitle', 'wpLinkTitleL10n', array(
-		'titleLabel' => __(' Title' ),
+		'titleLabel' => __( 'Title' ),
 	) );
 }
 

@@ -5,6 +5,12 @@ var wpLinkTitle;
 	var inputs = {};
 
 	wpLinkTitle = {
+		origsetDefaultValues: null,
+		origmceRefresh: null,
+		origgetAttrs: null,
+		origupdateFields: null,
+		orightmlUpdate: null,
+
 		init: function() {
 			// Put the title field back where it belongs
 			$( '.wp-link-text-field' ).before( '<div class="link-title-field"><label><span>' + wpLinkTitleL10n.titleLabel + '</span><input id="wp-link-title" type="text" name="linktitle" /></label></div>' );
@@ -21,65 +27,37 @@ var wpLinkTitle;
 			inputs.text = $( '#wp-link-text' );
 			inputs.openInNewTab = $( '#wp-link-target' );
 
-			// unbind the wplink handler here
-			inputs.submit.unbind('click');
-
-			// rebind it to this code instead
-			inputs.submit.click( function( event ) {
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				wpLinkTitle.update();
-			});
-
+			// override several functions in wpLink, save the originals
 			if ( 'undefined' !== typeof wpLink ) {
+				wpLinkTitle.origsetDefaultValues = wpLink.setDefaultValues;
+				wpLinkTitle.origmceRefresh = wpLink.mceRefresh;
+				wpLinkTitle.origgetAttrs = wpLink.getAttrs;
+				wpLinkTitle.origupdateFields = wpLink.updateFields;
+				wpLinkTitle.orightmlUpdate = wpLink.htmlUpdate;
+
+				wpLink.setDefaultValues = wpLinkTitle.setDefaultValues;
 				wpLink.mceRefresh = wpLinkTitle.mceRefresh;
 				wpLink.getAttrs = wpLinkTitle.getAttrs;
 				wpLink.updateFields = wpLinkTitle.updateFields;
+				wpLink.htmlUpdate = wpLinkTitle.htmlUpdate;
 			}
 		},
 
 		mceRefresh: function() {
-			var text,
-				editor = tinymce.get( wpActiveEditor ),
+			var editor = tinymce.get( wpActiveEditor ),
 				selectedNode = editor.selection.getNode(),
-				linkNode = editor.dom.getParent( selectedNode, 'a[href]' ),
-				onlyText = this.hasSelectedText( linkNode );
+				linkNode = editor.dom.getParent( selectedNode, 'a[href]' );
 
 			if ( linkNode ) {
-				text = linkNode.innerText || linkNode.textContent;
-				inputs.url.val( editor.dom.getAttrib( linkNode, 'href' ) );
 				inputs.title.val( editor.dom.getAttrib( linkNode, 'title' ) );
-				inputs.openInNewTab.prop( 'checked', '_blank' === editor.dom.getAttrib( linkNode, 'target' ) );
-				inputs.submit.val( wpLinkL10n.update );
-			} else {
-				text = editor.selection.getContent({ format: 'text' });
-				wpLink.setDefaultValues();
-				wpLinkTitle.setDefaultValues();
 			}
-
-			if ( onlyText ) {
-				inputs.text.val( text || '' );
-				inputs.wrap.addClass( 'has-text-field' );
-			} else {
-				inputs.text.val( '' );
-				inputs.wrap.removeClass( 'has-text-field' );
-			}
+			return wpLinkTitle.origmceRefresh.apply(this, arguments);
 		},
 
 		getAttrs: function() {
-			return {
-				href: $.trim( inputs.url.val() ),
-				title: $.trim( inputs.title.val() ),
-				target: inputs.openInNewTab.prop( 'checked' ) ? '_blank' : ''
-			};
-		},
-
-		update: function() {
-			if ( wpLink.isMCE() ) {
-				wpLink.mceUpdate();
-			} else {
-				wpLinkTitle.htmlUpdate();
-			}
+			attrs = wpLinkTitle.origgetAttrs.apply(this, arguments);
+			attrs.title = $.trim( inputs.title.val() );
+			return attrs;
 		},
 
 		htmlUpdate: function() {
@@ -151,13 +129,13 @@ var wpLinkTitle;
 		},
 
 		updateFields: function( e, li ) {
-			inputs.url.val( li.children( '.item-permalink' ).val() );
 			inputs.title.val( li.hasClass( 'no-title' ) ? '' : li.children( '.item-title' ).text() );
+			return wpLinkTitle.origupdateFields.apply(this, arguments);
 		},
 
 		setDefaultValues: function() {
-			// Set description to default.
 			inputs.title.val( '' );
+			return wpLinkTitle.origsetDefaultValues.apply(this, arguments);
 		}
 	};
 

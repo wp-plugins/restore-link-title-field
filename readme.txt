@@ -22,6 +22,10 @@ This plugin adds the Title field back.
 
 == Changelog ==
 
+= 1.2 =
+* Changed the JS to use original wpLink functions for everything except htmlUpdate, to improve compatibility. Ref: https://core.trac.wordpress.org/ticket/32180
+* Fix issue with title field not resetting on a new link
+
 = 1.1 =
 * Rewrite mostly by SergeyBiryukov to be somewhat smaller and more forward compatible.
 

@@ -3,7 +3,7 @@
 Plugin Name: Restore Link Title Field
 Plugin URI: http://ottopress.com/wordpress-plugins/restore-link-title-field
 Description: Adds back the missing title field to the TinyMCE link editor
-Version: 1.1
+Version: 1.2
 Author: Otto
 Author URI: http://ottopress.com
 License: GPLv2

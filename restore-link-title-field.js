@@ -41,6 +41,8 @@ var wpLinkTitle;
 				wpLink.updateFields = wpLinkTitle.updateFields;
 				wpLink.htmlUpdate = wpLinkTitle.htmlUpdate;
 			}
+
+			$( '#wp-link' ).find( '.query-results' ).on( 'river-select', wpLinkTitle.updateFields );
 		},
 
 		mceRefresh: function() {
@@ -130,7 +132,7 @@ var wpLinkTitle;
 
 		updateFields: function( e, li ) {
 			inputs.title.val( li.hasClass( 'no-title' ) ? '' : li.children( '.item-title' ).text() );
-			return wpLinkTitle.origupdateFields.apply(this, arguments);
+			//return wpLinkTitle.origupdateFields.apply(this, arguments);
 		},
 
 		setDefaultValues: function() {

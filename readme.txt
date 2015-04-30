@@ -22,6 +22,9 @@ This plugin adds the Title field back.
 
 == Changelog ==
 
+= 1.3 =
+* Fix the updateFields issue. When you click on a link from the search results, it should now populate the title correctly, like the old versions did.
+
 = 1.2 =
 * Changed the JS to use original wpLink functions for everything except htmlUpdate, to improve compatibility. Ref: https://core.trac.wordpress.org/ticket/32180
 * Fix issue with title field not resetting on a new link
